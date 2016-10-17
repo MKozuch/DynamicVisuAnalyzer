@@ -30,3 +30,5 @@ find_package(Qt5Core REQUIRED)
 
 add_library(dvaFourPaneView SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(dvaFourPaneView ${QT_LIBRARIES} ${VTK_LIBRARIES})
+
+INSTALL(TARGETS dvaFourPaneView RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)

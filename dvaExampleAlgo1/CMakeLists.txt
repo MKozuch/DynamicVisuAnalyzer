@@ -35,3 +35,5 @@ find_package(Qt5Core REQUIRED)
 
 add_library(dvaExampleAlgo1 SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(dvaExampleAlgo1 ${QT_LIBRARIES} ${VTK_LIBRARIES} ${ITK_LIBRARIES})
+
+INSTALL(TARGETS dvaExampleAlgo1 RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)

@@ -29,3 +29,5 @@ find_package(Qt5Core REQUIRED)
 
 add_executable(DynamicVisuAnalyzer ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(DynamicVisuAnalyzer ${QT_LIBRARIES} ${VTK_LIBRARIES})
+
+INSTALL(TARGETS DynamicVisuAnalyzer RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
