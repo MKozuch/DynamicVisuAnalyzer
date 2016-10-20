@@ -14,7 +14,7 @@ public:
 	virtual dvaData* getDataObject() = 0;
 
 public slots:
-	virtual void on_neurotoxin_emitted() = 0;
+virtual void on_neurotoxin_emitted() {};
 	virtual void on_imageData_updated() {};
 };
 

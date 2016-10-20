@@ -14,5 +14,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(DynamicVisuAnalyzer)
 add_subdirectory(dvaExampleAlgo1)
 add_subdirectory(dvaFourPaneView)
+add_subdirectory(DicomInfo)
 
-#install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION /. )
+install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION /. )

@@ -17,6 +17,7 @@ dvaData::~dvaData()
 }
 
 void dvaData::SetStudyPath(const char *path){
+	this->studyPath = path;
     this->reader->SetDirectoryName(path);
     this->reader->SetUpdateExtentToWholeExtent();
     this->reader->Update();
@@ -24,10 +25,16 @@ void dvaData::SetStudyPath(const char *path){
     int extent[6];
     this->reader->GetDataExtent(extent);
 
+
+
     emit this->DataUpdated();
 }
 
 vtkDICOMImageReader *dvaData::GetReader()
 {
 	return this->reader;
+}
+
+QString dvaData::getStudyPath() {
+	return this->studyPath;
 }

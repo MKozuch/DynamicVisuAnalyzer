@@ -15,22 +15,28 @@
 #include <QStringList>
 
 DynamicVisuAnalyzer::DynamicVisuAnalyzer(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::DynamicVisuAnalyzer)
+	QMainWindow(parent),
+	ui(new Ui::DynamicVisuAnalyzer)
 {
-    this->ui->setupUi(this);
-    this->imageData = new dvaData(this);
-	
+	this->ui->setupUi(this);
+	this->imageData = new dvaData(this);
+
 
 	//this->imageData->SetStudyPath("F:\\DICOM_resources\\VHM_Head");
 	this->imageData->SetStudyPath("F:\\DICOM_resources\\1.3.12.2.1107.5.2.32.35376.201309051427478535825107.0.0.0");
-	this->pluginLoad((qApp->applicationDirPath() + QString("\\dvaFourPaneView.dll")));
-	this->pluginLoad((qApp->applicationDirPath() + QString("\\dvaExampleAlgo1.dll")));
-	this->pluginLoad((qApp->applicationDirPath() + QString("\\TestPlugin.dll")));
-	
 
+	QStringList startupPlugins;
+	startupPlugins << QString("\\dvaFourPaneView.dll");
+	startupPlugins << QString("\\dvaExampleAlgo1.dll");
 
-	//this->pluginLoadTest();
+	foreach(QString pluginName, startupPlugins) {
+		try {
+			this->loadPlugin((qApp->applicationDirPath() + pluginName));
+		}
+		catch (QString e) {
+			QMessageBox::critical(this, "Error", QString("Error loading ") + pluginName + "\n" + e);
+		}
+	}
 
   /*  QPointer<dvaWidget> viewer = new dvaFourPaneView(this, imageData->GetReader());
     QPointer<dvaWidget> prog = new  dvaProgrammableWidget(this, imageData->GetReader());
@@ -102,30 +108,28 @@ void DynamicVisuAnalyzer::on_tabWidget_tabCloseRequested(int index) {
 
 }
 
-void DynamicVisuAnalyzer::pluginLoadTest() {
-	QDir pluginsDir(qApp->applicationDirPath());
-	pluginsDir.setNameFilters(QStringList() << "*.dll");
-	for each (QString fileName in pluginsDir.entryList(QDir::Files)){
-		QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
-		QObject *plugin = pluginLoader.instance();
-		if (plugin) {
-			dvaPluginInterface *pluginInterface = qobject_cast<dvaPluginInterface*>(plugin);
-			if (pluginInterface) {
-				qDebug() << pluginInterface->getPluginName();
-				this->ui->tabWidget->addTab(pluginInterface, pluginInterface->getPluginName());
-				pluginInterface->setDataObject(this->imageData);
-				QObject::connect(this->ui->neurotoxinEmitter, SIGNAL(clicked()), pluginInterface, SLOT(on_neurotoxin_emitted()));
-				QObject::connect(this->imageData, SIGNAL(DataUpdated()), pluginInterface, SLOT(on_imageData_updated()));
-			}
-			else qDebug() << "fail";
-		}
-		else qDebug() << "fail loading plugin " << fileName << " - " << pluginLoader.errorString();
-	}
-}
+//void DynamicVisuAnalyzer::pluginLoadTest() {
+//	QDir pluginsDir(qApp->applicationDirPath());
+//	pluginsDir.setNameFilters(QStringList() << "*.dll");
+//	for each (QString fileName in pluginsDir.entryList(QDir::Files)){
+//		QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
+//		QObject *plugin = pluginLoader.instance();
+//		if (plugin) {
+//			dvaPluginInterface *pluginInterface = qobject_cast<dvaPluginInterface*>(plugin);
+//			if (pluginInterface) {
+//				qDebug() << pluginInterface->getPluginName();
+//				this->ui->tabWidget->addTab(pluginInterface, pluginInterface->getPluginName());
+//				pluginInterface->setDataObject(this->imageData);
+//				QObject::connect(this->ui->neurotoxinEmitter, SIGNAL(clicked()), pluginInterface, SLOT(on_neurotoxin_emitted()));
+//				QObject::connect(this->imageData, SIGNAL(DataUpdated()), pluginInterface, SLOT(on_imageData_updated()));
+//			}
+//			else qDebug() << "fail";
+//		}
+//		else qDebug() << "fail loading plugin " << fileName << " - " << pluginLoader.errorString();
+//	}
+//}
 
-void DynamicVisuAnalyzer::pluginLoad(QString pluginpath) {
-	// TODO: przesunac obsluge zdarzenia po stronie gui do on_actionLoad_plug_in_triggered()
-
+void DynamicVisuAnalyzer::loadPlugin(QString pluginpath){
 	QPluginLoader pluginLoader(pluginpath);
 	QObject *plugin = pluginLoader.instance();
 	if (plugin) {
@@ -134,17 +138,13 @@ void DynamicVisuAnalyzer::pluginLoad(QString pluginpath) {
 			this->ui->tabWidget->addTab(pluginInterface, pluginInterface->getPluginName());
 			pluginInterface->setDataObject(this->imageData);
 			QObject::connect(this->imageData, SIGNAL(DataUpdated()), pluginInterface, SLOT(on_imageData_updated()));
-			//QObject::connect(this->ui->neurotoxinEmitter, SIGNAL(clicked()), pluginInterface, SLOT(on_neurotoxin_emitted()));
-			//QMessageBox::information(this, "Success", QString("Plugin") + pluginInterface->getPluginName() + "loaded successfully");
 		}
 		else {
-			qDebug() << "fail";
-			QMessageBox::critical(this, "Error", QString("File ") + pluginpath + " is not valid");
+			throw("The file is not a valid DynamicVisuAnalyzer plugin");
 		}
 	}
 	else {
-		qDebug() << "Fail loading plugin " << pluginpath << " - " << pluginLoader.errorString();
-		QMessageBox::critical(this, "Error", QString("File ") + pluginpath + " is not a DynamicVisuAnalyzer plugin");
+		throw(pluginLoader.errorString());
 	}
 }
 
@@ -157,6 +157,11 @@ void DynamicVisuAnalyzer::on_actionLoad_plug_in_triggered() {
 	int dialogExitCode = fileDialog.exec();
 	if (dialogExitCode) {
 		QString path = fileDialog.selectedFiles()[0];
-		this->pluginLoad(path);
+		try {
+			loadPlugin(path);
+		}
+		catch (QString e) {
+			QMessageBox::critical(this, "Error", QString("Error loading ") + path + "\n" + e);
+		}
 	}		
 }

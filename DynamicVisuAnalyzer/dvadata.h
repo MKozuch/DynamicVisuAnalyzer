@@ -16,6 +16,7 @@ public:
     ~dvaData();
 
     vtkDICOMImageReader *GetReader();
+	QString getStudyPath();
 
 signals:
     void PathChanged(const char*);
@@ -24,9 +25,10 @@ signals:
 public slots:
     void SetStudyPath(const char*);
 
-public:
+private:
 	vtkSmartPointer <vtkDICOMImageReader> reader;
 	int* volumeOfInterest[6];
+	QString studyPath;
 };
 
 #endif // DVADATA_H

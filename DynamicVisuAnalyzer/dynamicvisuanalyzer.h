@@ -36,7 +36,7 @@ private:
    // QList<QPointer<dvaWidget>> availableWidgets;
 	dvaData *imageData;
 	void pluginLoadTest();
-	void pluginLoad(QString);
+	void loadPlugin(QString);
 };
 
 #endif // DYNAMICVISUANALYZER_H
