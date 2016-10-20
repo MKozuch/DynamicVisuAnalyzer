@@ -45,6 +45,7 @@ void dvaDicomInfo::on_imageData_updated() {
 	const char *filename_c = firstfile.toStdString().c_str();
 
 	this->dcmReader.SetFileName(filename_c);
+
 	gdcm::File &dcmFile = dcmReader.GetFile();
 	gdcm::DataSet &dcmDataSet = dcmFile.GetDataSet();
 
@@ -64,7 +65,10 @@ void dvaDicomInfo::on_imageData_updated() {
 
 
 	for (gdcm::Dict::ConstIterator i = gdcmpubdict.Begin(); i != gdcmpubdict.End(); ++i) {
-		//std::pair<std::string, std::string> record = gdcmstringfilt.ToStringPair(*i);
+		std::pair<gdcm::Tag, gdcm::DictEntry> dentry = *i;
+		std::pair<std::string, std::string> record = gdcmstringfilt.ToStringPair(dentry.first);
+
+
 
 	}
 
