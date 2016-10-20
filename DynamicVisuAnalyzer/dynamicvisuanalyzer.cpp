@@ -28,6 +28,7 @@ DynamicVisuAnalyzer::DynamicVisuAnalyzer(QWidget *parent) :
 	QStringList startupPlugins;
 	startupPlugins << QString("\\dvaFourPaneView.dll");
 	startupPlugins << QString("\\dvaExampleAlgo1.dll");
+	startupPlugins << QString("\\dvaDicomInfo.dll");
 
 	foreach(QString pluginName, startupPlugins) {
 		try {
