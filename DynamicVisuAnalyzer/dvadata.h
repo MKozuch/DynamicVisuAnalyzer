@@ -2,10 +2,13 @@
 #define DVADATA_H
 
 #include <QObject>
+#include <QMap>
 
 #include <vtkDICOMImageReader.h>
 #include <vtkSmartPointer.h>
 #include <vtkImageAlgorithm.h>
+
+#include <vtkGDCMImageReader.h>
 
 class dvaData : public QObject
 {
@@ -15,8 +18,10 @@ public:
     explicit dvaData(QObject *parent = 0);
     ~dvaData();
 
-    vtkDICOMImageReader *GetReader();
+	QMap<QString, vtkSmartPointer<vtkImageData>> *preProcData;
+    vtkGDCMImageReader *GetReader();
 	QString getStudyPath();
+
 
 signals:
     void PathChanged(const char*);
@@ -26,7 +31,7 @@ public slots:
     void SetStudyPath(const char*);
 
 private:
-	vtkSmartPointer <vtkDICOMImageReader> reader;
+	vtkSmartPointer <vtkGDCMImageReader> reader;
 	int* volumeOfInterest[6];
 	QString studyPath;
 };

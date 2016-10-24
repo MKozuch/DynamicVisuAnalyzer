@@ -45,10 +45,9 @@ protected:
 	vtkSmartPointer<vtkResliceImageViewerMeasurements> resliceMeasurements;
 
 public slots:
-	void on_neurotoxin_emitted();
 	void on_imageData_updated();
 	void on_viewResetBtn_clicked();
-
+	void on_inputDataBox_currentIndexChanged(int);
 	//virtual void resliceMode(int);
 	//virtual void thickMode(int);
 	//virtual void SetBlendModeToMaxIP();

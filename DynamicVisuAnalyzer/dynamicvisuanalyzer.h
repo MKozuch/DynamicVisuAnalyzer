@@ -35,7 +35,7 @@ private:
     //QList<QPointer<dvaWidget>> activeWidgetsList;
    // QList<QPointer<dvaWidget>> availableWidgets;
 	dvaData *imageData;
-	void pluginLoadTest();
+	//void pluginLoadTest();
 	void loadPlugin(QString);
 };
 

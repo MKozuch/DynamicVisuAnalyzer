@@ -4,9 +4,6 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include <vtkAutoInit.h>
-VTK_MODULE_INIT(vtkRenderingOpenGL2);
-
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkImageAlgorithm.h>
@@ -221,6 +218,13 @@ QString dvaFourPaneView::getPluginName() {
 void dvaFourPaneView::setDataObject(dvaData* imagedata) {
 	this->imageData = imagedata;
 	this->setupViews();
+
+	QMap<QString, vtkSmartPointer<vtkImageData>> *datamap = this->imageData->preProcData;
+	QMapIterator<QString, vtkSmartPointer<vtkImageData>> i(*datamap);
+	while (i.hasNext()) {
+		i.next();
+		this->ui->inputDataBox->addItem(i.key());
+	}
 }
 
 dvaData* dvaFourPaneView::getDataObject(){
@@ -228,8 +232,6 @@ dvaData* dvaFourPaneView::getDataObject(){
 }
 
 void dvaFourPaneView::on_imageData_updated() {
-	qDebug() << "Plugin " << this->getPluginName() << " registered dataUpdated event";
-
 	double scalarrange[2];
 	this->imageData->GetReader()->GetOutput()->GetScalarRange(scalarrange);
 
@@ -265,11 +267,18 @@ void dvaFourPaneView::on_viewResetBtn_clicked() {
 	this->renderEverything();
 }
 
-void dvaFourPaneView::on_neurotoxin_emitted() {
-	QMessageBox::information(NULL, "Antidote administered!", "Warning! Blood-toxin levels detected!");
-}
-
 void dvaFourPaneView::renderEverything() {
 	for (int i = 0; i < 3; ++i) this->resliceViewerArr[i]->Render();
 	this->ui->view4->GetRenderWindow()->Render();
+}
+
+void dvaFourPaneView::on_inputDataBox_currentIndexChanged(int i) {
+	QString datainkey = this->ui->inputDataBox->currentText();
+	vtkImageData *datain = this->imageData->preProcData->value(datainkey);
+
+	for (int i = 0; i < 3; i++) {
+		this->resliceViewerArr[i]->SetInputData(datain);
+		this->resliceViewerArr[i]->Render();
+	}
+
 }

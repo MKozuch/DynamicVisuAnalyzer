@@ -28,14 +28,14 @@ include(${VTK_USE_FILE})
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
-#FIND_PACKAGE(GDCM REQUIRED)
-#include(${GDCM_USE_FILE})
+FIND_PACKAGE(GDCM REQUIRED)
+include(${GDCM_USE_FILE})
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Core REQUIRED)
 
 add_library(dvaDicomInfo SHARED ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(dvaDicomInfo ${QT_LIBRARIES} ${VTK_LIBRARIES} ${ITK_LIBRARIES}) #${GDCM_LIBRARIES})
+target_link_libraries(dvaDicomInfo ${QT_LIBRARIES} ${VTK_LIBRARIES} ${ITK_LIBRARIES} ${GDCM_LIBRARIES} vtkgdcm)
 
 INSTALL(TARGETS dvaDicomInfo RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)

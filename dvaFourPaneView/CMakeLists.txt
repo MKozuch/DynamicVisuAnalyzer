@@ -20,15 +20,17 @@ set(HEADER_FILES
 	
 	)
 	
-set(VTK_DIR %VTK_DIR%)
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
+
+find_package(GDCM REQUIRED)
+include(${GDCM_USE_FILE})
 
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Core REQUIRED)
 
 add_library(dvaFourPaneView SHARED ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(dvaFourPaneView ${QT_LIBRARIES} ${VTK_LIBRARIES})
+target_link_libraries(dvaFourPaneView ${QT_LIBRARIES} ${VTK_LIBRARIES} vtkgdcm)
 
 INSTALL(TARGETS dvaFourPaneView RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/plugins)

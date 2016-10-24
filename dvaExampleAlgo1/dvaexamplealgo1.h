@@ -41,18 +41,18 @@ private:
 
 	vtkSmartPointer<vtkImageViewer2> resliceView;
 
-	void setViewToMiddleSlice();
-
-	typedef itk::Image<int, 2> ImageType;
-	typedef itk::VTKImageToImageFilter<ImageType> VTKImageToImageType;
-	VTKImageToImageType::Pointer vtkImageToImageFilter;
+	vtkSmartPointer<vtkImageData> currentSliceRaw;
+	vtkSmartPointer<vtkImageData> currentSliceSegmented;
+	void extractSlice(vtkImageData* dataIn, int orientation, int slice);
+	void recalcSegmentation(int groupsNo);
 
 public slots:
 	void on_sliceOrientComboBox_currentIndexChanged(int);
 	void on_sliceSlider_valueChanged(int);
-	void on_neurotoxin_emitted();
 	void on_imageData_updated();
 	void on_showOriginalBtn_clicked(bool);
+	void on_groupsNumberSpinBox_valueChanged(int i);
+	void on_inputDataBoc_valueChanged(int i);
 };
 
 #endif // DVAEXAMPLEALGO1_H

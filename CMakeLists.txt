@@ -15,5 +15,6 @@ add_subdirectory(DynamicVisuAnalyzer)
 add_subdirectory(dvaExampleAlgo1)
 add_subdirectory(dvaFourPaneView)
 add_subdirectory(dvaDicomInfo)
+add_subdirectory(dvaGaussBlur)
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/bin/ DESTINATION /. )

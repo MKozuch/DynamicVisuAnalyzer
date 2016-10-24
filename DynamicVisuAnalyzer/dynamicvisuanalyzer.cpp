@@ -1,10 +1,6 @@
 #include "dynamicvisuanalyzer.h"
 #include "ui_dynamicvisuanalyzer.h"
 
-//#include "Widgets/dvafourpaneview.h"
-//#include "Widgets/dvawidget.h"
-//#include "Widgets/skullwidget.h"
-//#include "Widgets/dvaprogrammablewidget.h"
 #include "dvaPluginInterface.h"
 
 #include <QPointer>
@@ -26,9 +22,10 @@ DynamicVisuAnalyzer::DynamicVisuAnalyzer(QWidget *parent) :
 	this->imageData->SetStudyPath("F:\\DICOM_resources\\1.3.12.2.1107.5.2.32.35376.201309051427478535825107.0.0.0");
 
 	QStringList startupPlugins;
-	startupPlugins << QString("\\dvaFourPaneView.dll");
+	//startupPlugins << QString("\\dvaFourPaneView.dll");
+	//startupPlugins << QString("\\dvaDicomInfo.dll");
+	startupPlugins << QString("\\dvaGaussBlur.dll");
 	startupPlugins << QString("\\dvaExampleAlgo1.dll");
-	startupPlugins << QString("\\dvaDicomInfo.dll");
 
 	foreach(QString pluginName, startupPlugins) {
 		try {
@@ -38,23 +35,6 @@ DynamicVisuAnalyzer::DynamicVisuAnalyzer(QWidget *parent) :
 			QMessageBox::critical(this, "Error", QString("Error loading ") + pluginName + "\n" + e);
 		}
 	}
-
-  /*  QPointer<dvaWidget> viewer = new dvaFourPaneView(this, imageData->GetReader());
-    QPointer<dvaWidget> prog = new  dvaProgrammableWidget(this, imageData->GetReader());
-
-    this->availableWidgets.append(viewer);
-    this->availableWidgets.append(prog);
-
-    dvaWidget *item;
-    foreach(item, availableWidgets){
-        QObject::connect(this->imageData, SIGNAL(DataUpdated()), item, SLOT(DataUpdated()));
-        this->hide();
-    }
-
-    this->activeWidgetsList.append(viewer);
-    ui->tabWidget->addTab(viewer, viewer->GetWidgetName());
-
-    QObject::connect(this->imageData, SIGNAL(DataUpdated()), viewer, SLOT(DataUpdated()));*/
 }
 
 DynamicVisuAnalyzer::~DynamicVisuAnalyzer()

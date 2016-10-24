@@ -48,9 +48,6 @@ void dvaDicomInfo::on_imageData_updated() {
 	QStringList filenames = dir.entryList();
 	QString firstfile = dir.absoluteFilePath(filenames[0]);
 	const char *filename_c = firstfile.toLatin1().data();
-	//const char *filename_c = "F:\\DICOM_resources\\golonka\\E\\Z00";
-	//const char *filename_c = "F:\\DICOM_resources\\BRAINIX\\T1-SE-extrp - 601\\IM-0001-0001.dcm";
-	//const char *filename_c = "F:\\DICOM_resources\\1.3.12.2.1107.5.2.32.35376.201309051427478535825107.0.0.0\\0001.dcm";
 
 	this->dcmReader.SetFileName(firstfile.toLatin1().data());
 
@@ -72,16 +69,14 @@ void dvaDicomInfo::on_imageData_updated() {
 	gdcmpubdict.GetDictEntryByName("Patient's Name", patnametag);
 	
 	std::pair<std::string, std::string> namerecord = gdcmstringfilt.ToStringPair(patnametag);
-	std::cout << "Attribute Name Checked: " << namerecord.first << std::endl;
-	std::cout << "Attribute Value (string): " << namerecord.second << std::endl;
 
 	for (gdcm::Dict::ConstIterator i = gdcmpubdict.Begin(); i != gdcmpubdict.End(); ++i) {
 		std::pair<gdcm::Tag, gdcm::DictEntry> dentry = *i;
 		std::pair<std::string, std::string> record = gdcmstringfilt.ToStringPair(dentry.first);
 
 		if (record.second != "") {
-			std::cout << "Attribute Name Checked: " << record.first << std::endl;
-			std::cout << "Attribute Value (string): " << record.second << std::endl;
+			// std::cout << "Attribute Name Checked: " << record.first << std::endl;
+			// std::cout << "Attribute Value (string): " << record.second << std::endl;
 
 			int rowcount = this->ui->tableWidget->rowCount();
 			this->ui->tableWidget->insertRow(rowcount);
